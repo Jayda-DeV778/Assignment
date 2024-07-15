@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+<script>
+
+    let ages = [19, 22, 19, 24, 20, 25, 26, 24, 25, 24]
+
+    console.log(ages);
+
+    console.log(ages.sort());
+
+    let theMiddle = Math.floor(ages.length / 2);
+    let value = ages[theMiddle];
+    console.log(value);
+
+    let sum = ages.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+    let average = sum / ages.length;
+
+    console.log(average);
+
+    let maxNumb = Math.max(...ages)
+    console.log(maxNumb);
+
+    let minNumb = Math.min(...ages)
+    console.log(minNumb);
+
+    let range = (maxNumb - minNumb)
+    console.log(range);
+
+    let divNumb = Math.abs(minNumb - average)
+    let divNumbdecimal = divNumb.toFixed(2)
+
+    console.log(divNumbdecimal);
+
+    let divNumb1 = Math.abs(maxNumb - average)
+    let divNumbdecimal1 = divNumb1.toFixed(2)
+
+    console.log(divNumbdecimal1);
+</script>
