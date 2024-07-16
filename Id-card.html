@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Document</title>
+    <title>ID-Card</title>
     <style>
         .circular img {
             width: 65px;
@@ -101,34 +101,34 @@
 </html>
 
 <script>
-  
-let card1 = document.getElementById('card1');
-let card2 = document.getElementById('card2');
-let card3 = document.getElementById('card3');
-let card4 = document.getElementById('card4');
 
-let cards = [card1, card2, card3, card4];
+    let card1 = document.getElementById('card1');
+    let card2 = document.getElementById('card2');
+    let card3 = document.getElementById('card3');
+    let card4 = document.getElementById('card4');
 
-cards[0].style.display = 'block';
+    let cards = [card1, card2, card3, card4];
 
-for (let i = 1; i < cards.length; i++) {
-    cards[i].style.display = 'none';
-}
+    cards[0].style.display = 'block';
 
-let currentCard = 0;
+    for (let i = 1; i < cards.length; i++) {
+        cards[i].style.display = 'none';
+    }
 
-function ShowNext() {
-    cards[currentCard].style.display = 'none';
-    currentCard = (currentCard + 1) % cards.length;
-    cards[currentCard].style.display = 'block';
-}
+    let currentCard = 0;
+
+    function ShowNext() {
+        cards[currentCard].style.display = 'none';
+        currentCard = (currentCard + 1) % cards.length;
+        cards[currentCard].style.display = 'block';
+    }
 
 
-function showPrevious() {
-    cards[currentCard].style.display = 'none';
-    currentCard = (currentCard - 1 + cards.length) % cards.length;
-    cards[currentCard].style.display = 'block';
-}
+    function showPrevious() {
+        cards[currentCard].style.display = 'none';
+        currentCard = (currentCard - 1 + cards.length) % cards.length;
+        cards[currentCard].style.display = 'block';
+    }
 
 
 
