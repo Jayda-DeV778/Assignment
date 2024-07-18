@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input oninput="search(event)" id="searchBar" type="text">
+    <ul id="display"></ul>
+</body>
+</html>
+
+<script>
+    let searchBar = document.getElementById('searchBar')
+    let array = ['beans', 'rice','tomato' , 'meat' , 'lamb']
+    let searchList = document.getElementById('display')
+    console.log(array);
+
+    // searchList.innerHTML = array
+
+    function search(e) {
+        let inputValue = e.target.value
+        if ( array.includes(inputValue))  {
+            searchList.innerHTML = inputValue
+        } else {
+           searchList.innerHTML= 'Item doesnt exist'
+        }
+        console.log(e.target.value);
+    }
+</script>

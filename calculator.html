@@ -15,7 +15,6 @@
         main {
             width: 310px;
         }
-
         input {
             background-color: transparent;
             border: none;
@@ -26,11 +25,9 @@
             padding: 5px;
             color: white;
         }
-
         ::placeholder {
             color: white;
         }
-
         .material-symbols-outlined {
             font-variation-settings:
                 'FILL' 0,
@@ -42,7 +39,7 @@
 </head>
 
 <body class="bg-dark">
-    <main class="bg-dark card m-auto border border-secondary rounded mt-4">
+    <main class="bg-dark card m-auto border border-light rounded mt-4">
         <div id="">
             <div class="d-flex justify-content-end my-3 mx-2">
                 <input id="input" type="text" placeholder="0" readonly>
@@ -52,13 +49,13 @@
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 ">CE</button>
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 text-danger">C</button>
             <button onclick="clearEntry()" class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">backspace</span></button>
-            <button class="btn btn-secondary btn-lg w-25">/</button>
+            <button onclick="appendSymbol(`${'/'}`)"  class="btn btn-secondary btn-lg w-25">/</button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="fraction()" class="btn btn-secondary btn-lg w-25"><sup>1</sup>/x</button>
             <button onclick="squared()" class="btn btn-secondary btn-lg w-25">x <sup>2</sup></button>
             <button onclick="root()" class="btn btn-secondary btn-lg w-25"><sup>2</sup>√x</button>
-            <button class="btn btn-secondary btn-lg w-25">-</button>
+            <button onclick="calculatePercentage()" class="btn btn-secondary btn-lg w-25">%</button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="appendnumber(7)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">7</button>
@@ -123,7 +120,7 @@
         try{
             userInput.value = eval(userInput.value)
         } catch(error){
-            userInput.value = 'Error'
+            userInput.value = 'Syntax Error'
             alert('Syntax Error');
         }
     }
@@ -132,7 +129,7 @@
         try {
             userInput.value = Math.pow(eval(userInput.value),2)
         } catch (error) {
-            userInput.value = 'Error'
+            userInput.value = 'Syntax Error'
             alert('Mathematical Error');
         }
     }
@@ -141,7 +138,7 @@
         try {
             userInput.value = 1 / eval(userInput.value)
         } catch (error) {
-            userInput.value = 'Error'
+            userInput.value = 'Mathematical Error'
             alert('Mathematical Error');
         }
     }
@@ -150,10 +147,19 @@
         try {
             userInput.value = Math.sqrt( eval(userInput.value)) 
         } catch (error) {
-            userInput.value = 'Error'
+            userInput.value = 'Mathematical Error'
             alert('Mathematical Error')
         }
     }
+
+
+    function calculatePercentage() {
+            try {
+                userInput.value = parseFloat(userInput.value) / 100;
+            } catch (error) {
+                userInput.value = 'Mathematical Error';
+            }
+        }
 
 
 </script>
