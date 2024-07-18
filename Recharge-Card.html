@@ -4,46 +4,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Recharge card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body>
-    <div>
-        <select name="" id="provider">
-            <option value="choose provider"></option>
-            <option value="mtn"></option>
-            <option value="glo"></option>
-            <option value="9mobile"></option>
-            <option value="mtn"></option>
+<body class="bg-dark">
+    <div class="d-flex justify-content-center mt-3">
+        <select class="bg-dark text-light fw-medium" name="" id="provider">
+            <option value="choose provider">CHOOSE PROVIDER</option>
+            <option value="mtn">MTN</option>
+            <option value="glo">GLO</option>
+            <option value="9mobile">9MOBILE</option>
+            <option value="mtn">AIRTEL</option>
         </select>
     </div>
 
-    <div>
-        <select name="" id="amount">
-            <option value="choose amount"></option>
-            <option value="100"></option>
-            <option value="200"></option>
-            <option value="500"></option>
-            <option value="1000"></option>
+    <div class="d-flex justify-content-center mt-3">
+        <select class="bg-dark text-light fw-medium" name="" id="amount">
+            <option value="choose amount">Amount</option>
+            <option value="100"> &#8358;100</option>
+            <option value="200"> &#8358;200</option>
+            <option value="500"> &#8358;500</option>
+            <option value="1000"> &#8358;1000</option>
         </select>
     </div>
 
-    <button onclick="generate()"> Generate </button>
-    <h1> pin: <span> </span></h1>
-
-
-    <div>
-        <p>load airtime</p>
-        <input type="text"> <button> load </button>
+    <div class="d-flex justify-content-center mt-4">
+        <div>
+            <button class="btn btn-success" onclick="generate()"> Generate </button>
+            <h1 class="text-light"> PIN: <span class=" text-light" id="pin_span"> </span></h1>
+        </div>
     </div>
 
+    <div class="d-flex justify-content-center gap-3">
+        <div>
+            <p class="text-light">Load Airtime</p>
+            <div class="gap-3 d-flex">
+                <input type="text" id="rechargeInput"> <button onclick="loadAirtime()" class="btn btn-success">Load
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <p class="d-flex justify-content-center text-danger mt-3 fw-medium fs-3" id="error_display"></p>
 </body>
 
 </html>
+
 <script>
+    let providerSelector = document.getElementById('provider');
+    let amountSelector = document.getElementById('amount');
+    let rechargeInput = document.getElementById('rechargeInput');
+    let display = document.getElementById('error_display');
+    let selectedProvider = '';
+    let selectedAmount = '';
+    let randomPin = '';
 
+    providerSelector.addEventListener('change', (ev) => {
+        console.log(ev.target.value);
+        selectedProvider = ev.target.value;
+    });
 
+    amountSelector.addEventListener('change', (ev) => {
+        console.log(ev.target.value);
+        selectedAmount = ev.target.value;
+    });
+
+    function generate() {
+        randomPin = '';
+        display.innerHTML = '';
+        if (selectedProvider !== '' && selectedAmount !== '') {
+            if (
+                selectedProvider === 'mtn' ||
+                selectedProvider === 'airtel' ||
+                selectedProvider === 'glo' ||
+                selectedProvider === '9mobile'
+            ) {
+                if (
+                    selectedAmount === '100' ||
+                    selectedAmount === '200' ||
+                    selectedAmount === '1000' ||
+                    selectedAmount === '500'
+                ) {
+                    display.innerHTML = '';
+                    for (let i = 0; i < 10; i++) {
+                        randomPin += Math.floor(Math.random() * 10);
+                    }
+                    document.getElementById('pin_span').textContent = randomPin;
+                } else {
+                    display.innerHTML = `Invalid Amount Selected for ${providerSelector.value}`;
+                }
+            } else {
+                display.innerHTML = 'Invalid Provider Selected';
+            }
+        } else {
+            display.innerHTML = 'Please select a provider and amount';
+        }
+    }
+
+    function loadAirtime() {
+        display.innerHTML = '';
+        if (rechargeInput.value === `*555*${randomPin}#`) {
+            alert('Airtime Successfully Recharged');
+            selectedProvider = '';
+            selectedAmount = '';
+            randomPin = '';
+            document.getElementById('pin_span').textContent = '';
+            providerSelector.selectedIndex = 0;
+            amountSelector.selectedIndex = 0;
+            rechargeInput.value = '';
+        } else {
+            display.innerHTML = 'Wrong Parameters Provided';
+        }
+    }
 
 
 </script>
