@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link rel="shortcut icon" href="./Images/calculator.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./Images/calculator.png" type="image/x-icon">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Calculator</title>
@@ -15,6 +15,7 @@
         main {
             width: 310px;
         }
+
         input {
             background-color: transparent;
             border: none;
@@ -25,9 +26,11 @@
             padding: 5px;
             color: white;
         }
+
         ::placeholder {
             color: white;
         }
+
         .material-symbols-outlined {
             font-variation-settings:
                 'FILL' 0,
@@ -49,7 +52,7 @@
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 ">CE</button>
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 text-danger">C</button>
             <button onclick="clearEntry()" class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">backspace</span></button>
-            <button onclick="appendSymbol(`${'/'}`)"  class="btn btn-secondary btn-lg w-25">/</button>
+            <button onclick="appendSymbol(`${'/'}`)" class="btn btn-secondary btn-lg w-25">/</button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="fraction()" class="btn btn-secondary btn-lg w-25"><sup>1</sup>/x</button>
@@ -61,7 +64,7 @@
             <button onclick="appendnumber(7)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">7</button>
             <button onclick="appendnumber(8)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">8</button>
             <button onclick="appendnumber(9)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">9</button>
-            <button onclick="appendSymbol(`${'*'}`)"  class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">close</span></button>
+            <button onclick="appendSymbol(`${'*'}`)" class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">close</span></button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="appendnumber(4)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">4</button>
@@ -87,79 +90,83 @@
 </html>
 
 <script>
-    let userInput = document.getElementById("input")
+    let userInput = document.getElementById("input");
+
+    function formatNumber(num) {
+        if (isNaN(num) || num === "") return num;
+        return Number(num).toLocaleString();
+    }
 
     function appendnumber(num) {
-        userInput.value += num;
+        userInput.value = formatNumber(userInput.value.replace(/,/g, '') + num);
     }
+
     function appendSymbol(sym) {
-        if (userInput.value === '')  return;
-        userInput.value += sym;
+        if (userInput.value === '') return;
+        userInput.value = userInput.value.replace(/,/g, '') + sym;
     }
 
     function clearInput() {
         userInput.value = '';
     }
-   
-    function clearEntry(){
-    userInput.value = userInput.value.slice(0, -1)
-    if (userInput.value === '') {
-        userInput.value = '0';
-    }
-    }
 
-    function signToggle(){
-        if(userInput.value[0] === '-'){
-            userInput.value = userInput.value.slice(1);
-        } else{
-            userInput.value = '-' + userInput.value
+    function clearEntry() {
+        userInput.value = formatNumber(userInput.value.replace(/,/g, '').slice(0, -1));
+        if (userInput.value === '') {
+            userInput.value = '0';
         }
     }
 
-    function equalTo(){
-        try{
-            userInput.value = eval(userInput.value)
-        } catch(error){
-            userInput.value = 'Syntax Error'
+    function signToggle() {
+        if (userInput.value[0] === '-') {
+            userInput.value = userInput.value.slice(1);
+        } else {
+            userInput.value = '-' + userInput.value;
+        }
+        userInput.value = formatNumber(userInput.value.replace(/,/g, ''));
+    }
+
+    function equalTo() {
+        try {
+            userInput.value = formatNumber(eval(userInput.value.replace(/,/g, '')));
+        } catch (error) {
+            userInput.value = 'Syntax Error';
             alert('Syntax Error');
         }
     }
 
-    function squared(){
+    function squared() {
         try {
-            userInput.value = Math.pow(eval(userInput.value),2)
+            userInput.value = formatNumber(Math.pow(eval(userInput.value.replace(/,/g, '')), 2));
         } catch (error) {
-            userInput.value = 'Syntax Error'
+            userInput.value = 'Syntax Error';
             alert('Mathematical Error');
         }
     }
 
-    function fraction(){
+    function fraction() {
         try {
-            userInput.value = 1 / eval(userInput.value)
+            userInput.value = formatNumber(1 / eval(userInput.value.replace(/,/g, '')));
         } catch (error) {
-            userInput.value = 'Mathematical Error'
+            userInput.value = 'Mathematical Error';
             alert('Mathematical Error');
         }
     }
 
-    function root(){
+    function root() {
         try {
-            userInput.value = Math.sqrt( eval(userInput.value)) 
+            userInput.value = formatNumber(Math.sqrt(eval(userInput.value.replace(/,/g, ''))));
         } catch (error) {
-            userInput.value = 'Mathematical Error'
-            alert('Mathematical Error')
+            userInput.value = 'Mathematical Error';
+            alert('Mathematical Error');
         }
     }
-
 
     function calculatePercentage() {
-            try {
-                userInput.value = parseFloat(userInput.value) / 100;
-            } catch (error) {
-                userInput.value = 'Mathematical Error';
-            }
+        try {
+            userInput.value = formatNumber(parseFloat(userInput.value.replace(/,/g, '')) / 100);
+        } catch (error) {
+            userInput.value = 'Mathematical Error';
         }
-
-
+    }
 </script>
