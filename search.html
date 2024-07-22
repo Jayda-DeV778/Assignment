@@ -20,7 +20,7 @@
     // searchList.innerHTML = array
 
     function search(e) {
-        let inputValue = e.target.value
+        let inputValue = e.target.value.toLowerCase()
         if ( array.includes(inputValue))  {
             searchList.innerHTML = inputValue
         } else {
