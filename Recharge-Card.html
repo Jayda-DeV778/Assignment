@@ -18,7 +18,22 @@
             border-collapse: collapse;
             padding: 15px;
             border: 1px solid white;
-            margin: auto
+            margin: auto;
+        }
+
+        #input {
+            position: absolute;
+            right: 5px;
+            top: 40px;
+        }
+
+        .Balance div {
+            margin-top: 10px;
+        }
+        #dics{
+          position: absolute;
+          right: 5px;
+          top: 300px;
         }
     </style>
 </head>
@@ -27,10 +42,10 @@
     <div class="d-flex justify-content-center mt-3">
         <select class="bg-dark text-light fw-medium" name="" id="provider">
             <option value="choose provider">CHOOSE PROVIDER</option>
-            <option value="mtn">MTN</option>
-            <option value="glo">GLO</option>
+            <option value="Mtn">MTN</option>
+            <option value="Glo">GLO</option>
             <option value="9mobile">9MOBILE</option>
-            <option value="airtel">AIRTEL</option>
+            <option value="Airtel">AIRTEL</option>
         </select>
     </div>
 
@@ -46,10 +61,10 @@
 
     <div class="d-flex justify-content-center mt-4">
         <div>
-            <button class="btn btn-success mx-5" onclick="generate()"> Generate </button>
-            <h1 class="text-light d-flex justify-content-center"> PIN: <span class=" text-light" id="pin_span"> </span>
+            <button class="btn btn-success mx-5" onclick="generate()">Generate</button>
+            <h1 class="text-light d-flex justify-content-center">PIN: <span class=" text-light" id="pin_span"></span>
             </h1>
-            <h1 class="text-light d-flex justify-content-center">CODE:*555*#</h1>
+            <h1 class="text-light d-flex justify-content-center">CODE: *555*#</h1>
         </div>
     </div>
 
@@ -66,13 +81,19 @@
     <p class="d-flex justify-content-center text-danger mt-3 fw-medium fs-3" id="error_display"></p>
     <p class="d-flex justify-content-center text-success mt-3 fw-medium fs-3" id="airtime_display"></p>
 
+    <div class="d-flex gap-3 justify-content-center my-2">
+        <button class="btn btn-primary" onclick="allData()">All</button>
+        <button class="btn btn-success" onclick="showUsedData()">Used</button>
+        <button class="btn btn-warning" onclick="unUsedData()">Unused</button>
+    </div>
+
     <table class="text-light">
         <thead>
             <tr>
                 <th>Provider</th>
                 <th>Amount</th>
                 <th>Pin</th>
-                <th>Date Used</th>
+                <th>Date Created</th>
                 <th>Used</th>
                 <th>Time Used</th>
             </tr>
@@ -81,12 +102,33 @@
         </tbody>
     </table>
     <button class="btn btn-danger btn-lg ms-4 my-3" onclick="deleteItem()">Delete All</button>
+    <div class="d-flex justify-content-end mx-3" id="dics"> <button class="btn btn-danger btn-lg ms-4 my-3 " onclick="deleteAll()">Delete Balance</button></div>
+   
+
+
+    <div class="d-flex justify-content-end mt-3 row-gap-2" id="input">
+        <div class="Balance">
+            <div class="d-flex gap-1">
+                <h1 class="text-light h5">MTN Balance:</h1> <input type="text" readonly id="balance1" value="0">
+            </div>
+            <div class="d-flex gap-1">
+                <h1 class="text-light h5">GLO Balance:</h1> <input type="text" readonly id="balance2" value="0">
+            </div>
+            <div class="d-flex gap-1">
+                <h1 class="text-light h5">9Mobile Balance:</h1><input type="text" readonly id="balance3" value="0">
+            </div>
+            <div class="d-flex gap-1">
+                <h1 class="text-light h5">AIRTEL Balance:</h1> <input type="text" readonly id="balance4" value="0">
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
 
 <script>
-    let database = JSON.parse(localStorage.getItem("pinsDatabase")) || []
+    let database = JSON.parse(localStorage.getItem("pinsDatabase")) || [];
     let providerSelector = document.getElementById('provider');
     let amountSelector = document.getElementById('amount');
     let rechargeInput = document.getElementById('rechargeInput');
@@ -96,18 +138,30 @@
     let selectedAmount = '';
     let randomPin = '';
 
+    let balance1 = document.getElementById('balance1');
+    let balance2 = document.getElementById('balance2');
+    let balance3 = document.getElementById('balance3');
+    let balance4 = document.getElementById('balance4');
+
     window.onload = function () {
         loadDatabase();
+        loadBalances();
     };
 
     function loadDatabase() {
         const data = localStorage.getItem('pinsDatabase');
         if (data) {
             database = JSON.parse(data);
-            database.forEach(item => {
-                addToTable(item);
-            });
+            updateTable();
         }
+    }
+
+    function updateTable() {
+        const tableBody = document.getElementById('info');
+        tableBody.innerHTML = '';
+        database.forEach(item => {
+            addToTable(item);
+        });
     }
 
     function addToTable(item) {
@@ -116,7 +170,7 @@
         row.insertCell(0).innerText = item.Provider;
         row.insertCell(1).innerText = item.Amount;
         row.insertCell(2).innerText = item.Pin;
-        row.insertCell(3).innerText = item.dateUsed;
+        row.insertCell(3).innerText = item.dateCreated;
         row.insertCell(4).innerText = item.isUsed ? 'True' : 'False';
         row.insertCell(5).innerText = item.timeUsed || 'N/A';
     }
@@ -133,43 +187,33 @@
         randomPin = '';
         display.innerHTML = '';
         if (selectedProvider !== '' && selectedAmount !== '') {
-            if (
-                selectedProvider === 'mtn' ||
-                selectedProvider === 'airtel' ||
-                selectedProvider === 'glo' ||
-                selectedProvider === '9mobile'
-            ) {
-                if (
-                    selectedAmount === '100' ||
-                    selectedAmount === '200' ||
-                    selectedAmount === '1000' ||
-                    selectedAmount === '500'
-                ) {
-                    display.innerHTML = '';
-                    for (let i = 0; i < 10; i++) {
-                        randomPin += Math.floor(Math.random() * 10);
-                    }
-                    rechargeInput.value = '';
-                    document.getElementById('pin_span').textContent = randomPin;
-                    let obj = {
-                        Provider: selectedProvider,
-                        Amount: selectedAmount,
-                        Pin: randomPin,
-                        dateUsed: new Date().toDateString(),
-                        isUsed: false,
-                        timeUsed: null
-                    };
+            if (['Mtn', 'Airtel', 'Glo', '9mobile'].includes(selectedProvider) &&
+                ['100', '200', '500', '1000'].includes(selectedAmount)) {
+                for (let i = 0; i < 10; i++) {
+                    randomPin += Math.floor(Math.random() * 10);
+                }
+
+                document.getElementById('pin_span').textContent = randomPin;
+                let obj = {
+                    Provider: selectedProvider,
+                    Amount: selectedAmount,
+                    Pin: randomPin,
+                    dateCreated: new Date().toDateString(),
+                    isUsed: false,
+                    timeUsed: null
+                };
+                if (!database.find(item => item.Pin === randomPin)) {
                     database.push(obj);
                     localStorage.setItem('pinsDatabase', JSON.stringify(database));
-                    addToTable(obj);
+                    updateTable(); 
                 } else {
-                    display.innerHTML = `Invalid Amount Selected for ${providerSelector.value}`;
+                    display.innerHTML = 'PIN already exists. Please regenerate.';
                 }
             } else {
-                display.innerHTML = 'Invalid Provider Selected';
+                display.innerHTML = `Invalid amount or provider selected.`;
             }
         } else {
-            display.innerHTML = 'Please select a provider and amount';
+            display.innerHTML = 'Please select a provider and amount.';
         }
     }
 
@@ -177,43 +221,102 @@
         display.innerHTML = '';
         const inputValue = rechargeInput.value.trim();
 
-        if (inputValue === `*555*${randomPin}#`) {
-            const pin = randomPin;
-            const record = database.find(item => item.Pin === pin);
+        const record = database.find(item => item.Pin === randomPin);
+        if (!record) {
+            display.innerHTML = 'Invalid PIN';
+            return;
+        }
 
-            if (record && !record.isUsed) {
+        if (inputValue === `*555*${record.Pin}#`) {
+            if (!record.isUsed) {
                 record.isUsed = true;
                 record.timeUsed = new Date().toLocaleTimeString();
                 localStorage.setItem('pinsDatabase', JSON.stringify(database));
-                document.getElementById('info').innerHTML = '';
-                database.forEach(item => addToTable(item));
-                displayAirtime.innerHTML = 'Airtime successfully loaded!';
-            } else if (record && record.isUsed) {
-                display.innerHTML = 'This PIN has already been used.';
+                alert('Airtime successfully loaded!');
+                updateBalance(record.Provider, record.Amount);
+                updateTable(); 
             } else {
-                display.innerHTML = 'Invalid PIN';
+                display.innerHTML = 'This PIN has already been used.';
             }
-            selectedProvider = '';
-            selectedAmount = '';
-            randomPin = '';
-            document.getElementById('pin_span').textContent = '';
-            providerSelector.selectedIndex = 0;
-            amountSelector.selectedIndex = 0;
-            rechargeInput.value = '';
-            displayAirtime.innerHTML = '';
         } else {
-            display.innerHTML = 'Wrong Parameters Provided';
+            display.innerHTML = 'Pin does not exist';
         }
+        
+   
+    }
+
+
+
+    function updateBalance(provider, amount) {
+        amount = parseInt(amount);
+        switch (provider) {
+            case 'Mtn':
+                balance1.value = parseInt(balance1.value.replace('₦', '')) + amount;
+                break;
+            case 'Glo':
+                balance2.value = parseInt(balance2.value) + amount;
+                break;
+            case '9mobile':
+                balance3.value = parseInt(balance3.value) + amount;
+                break;
+            case 'Airtel':
+                balance4.value = parseInt(balance4.value) + amount;
+                break;
+        }
+        saveBalances();
+    }
+
+    function saveBalances() {
+        localStorage.setItem('mtnBalance', balance1.value);
+        localStorage.setItem('gloBalance', balance2.value);
+        localStorage.setItem('mobileBalance', balance3.value);
+        localStorage.setItem('airtelBalance', balance4.value);
+    }
+
+    function loadBalances() {
+        balance1.value = localStorage.getItem('mtnBalance') || '0';
+        balance2.value = localStorage.getItem('gloBalance') || '0';
+        balance3.value = localStorage.getItem('mobileBalance') || '0';
+        balance4.value = localStorage.getItem('airtelBalance') || '0';
+    }
+
+    function allData() {
+        updateTable();
+    }
+
+    function showUsedData() {
+        const tableBody = document.getElementById('info');
+        tableBody.innerHTML = '';
+        database.filter(item => item.isUsed).forEach(item => {
+            addToTable(item);
+        });
+    }
+
+    function unUsedData() {
+        const tableBody = document.getElementById('info');
+        tableBody.innerHTML = '';
+        database.filter(item => !item.isUsed).forEach(item => {
+            addToTable(item);
+        });
     }
 
     function deleteItem() {
-        localStorage.removeItem('pinsDatabase');
-        database = [];
-        const tableBody = document.getElementById('info');
-        tableBody.innerHTML = '';
+        if (confirm("Are you sure you want to delete all records?")) {
+            localStorage.removeItem('pinsDatabase');
+            database = [];
+            updateTable(); 
+        }
     }
-</script>
 
-
+    function deleteAll() {
+        if (confirm("Are you sure you want to clear all balances?")) {
+            localStorage.removeItem('pinsDatabase');
+            localStorage.removeItem('mtnBalance');
+            localStorage.removeItem('gloBalance');
+            localStorage.removeItem('mobileBalance');
+            localStorage.removeItem('airtelBalance');
+            location.reload();
+        }
+    }
 
 </script>
