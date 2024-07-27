@@ -36,6 +36,11 @@
             right: 5px;
             top: 300px;
         }
+        #ddd{
+            position: absolute;
+            left: 20px;
+            top: 450px;
+        }
     </style>
 </head>
 
@@ -102,9 +107,8 @@
         <tbody id="info">
         </tbody>
     </table>
-    <button class="btn btn-danger btn-lg ms-4 my-3" onclick="deleteItem()">Delete All</button>
-    <div class="d-flex justify-content-end mx-3" id="dics"> <button class="btn btn-danger btn-lg ms-4 my-3 "
-            onclick="deleteAll()">Delete Balance</button></div>
+    <button class="btn btn-danger btn-lg ms-4 my-3" onclick="deleteItem()" id="ddd">Delete All</button>
+    <div class="d-flex justify-content-end mx-3" id="dics"> <button class="btn btn-danger btn-lg ms-4 my-3 " onclick="deleteAll()">Delete Balance</button></div>
 
 
 
@@ -253,11 +257,18 @@
 
     }
 
+    function saveBalances() {
+        localStorage.setItem('mtnBalance', balance1.value);
+        localStorage.setItem('gloBalance', balance2.value);
+        localStorage.setItem('mobileBalance', balance3.value);
+        localStorage.setItem('airtelBalance', balance4.value);
+    }
+
     function updateBalance(provider, amount) {
         amount = parseInt(amount);
         switch (provider) {
             case 'Mtn':
-                balance1.value = parseInt(balance1.value.replace('₦', '')) + amount;
+                balance1.value = parseInt(balance1.value) + amount;
                 break;
             case 'Glo':
                 balance2.value = parseInt(balance2.value) + amount;
@@ -270,13 +281,6 @@
                 break;
         }
         saveBalances();
-    }
-
-    function saveBalances() {
-        localStorage.setItem('mtnBalance', balance1.value);
-        localStorage.setItem('gloBalance', balance2.value);
-        localStorage.setItem('mobileBalance', balance3.value);
-        localStorage.setItem('airtelBalance', balance4.value);
     }
 
     function loadBalances() {
@@ -316,7 +320,6 @@
 
     function deleteAll() {
         if (confirm("Are you sure you want to clear all balances?")) {
-            localStorage.removeItem('pinsDatabase');
             localStorage.removeItem('mtnBalance');
             localStorage.removeItem('gloBalance');
             localStorage.removeItem('mobileBalance');
