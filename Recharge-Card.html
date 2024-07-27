@@ -30,10 +30,11 @@
         .Balance div {
             margin-top: 10px;
         }
-        #dics{
-          position: absolute;
-          right: 5px;
-          top: 300px;
+
+        #dics {
+            position: absolute;
+            right: 5px;
+            top: 300px;
         }
     </style>
 </head>
@@ -102,8 +103,9 @@
         </tbody>
     </table>
     <button class="btn btn-danger btn-lg ms-4 my-3" onclick="deleteItem()">Delete All</button>
-    <div class="d-flex justify-content-end mx-3" id="dics"> <button class="btn btn-danger btn-lg ms-4 my-3 " onclick="deleteAll()">Delete Balance</button></div>
-   
+    <div class="d-flex justify-content-end mx-3" id="dics"> <button class="btn btn-danger btn-lg ms-4 my-3 "
+            onclick="deleteAll()">Delete Balance</button></div>
+
 
 
     <div class="d-flex justify-content-end mt-3 row-gap-2" id="input">
@@ -205,7 +207,7 @@
                 if (!database.find(item => item.Pin === randomPin)) {
                     database.push(obj);
                     localStorage.setItem('pinsDatabase', JSON.stringify(database));
-                    updateTable(); 
+                    updateTable();
                 } else {
                     display.innerHTML = 'PIN already exists. Please regenerate.';
                 }
@@ -215,6 +217,8 @@
         } else {
             display.innerHTML = 'Please select a provider and amount.';
         }
+
+        rechargeInput.value = ''
     }
 
     function loadAirtime() {
@@ -234,15 +238,19 @@
                 localStorage.setItem('pinsDatabase', JSON.stringify(database));
                 alert('Airtime successfully loaded!');
                 updateBalance(record.Provider, record.Amount);
-                updateTable(); 
+                updateTable();
             } else {
                 display.innerHTML = 'This PIN has already been used.';
             }
         } else {
             display.innerHTML = 'Pin does not exist';
         }
-        
-   
+
+        document.getElementById('pin_span').textContent = ''
+        rechargeInput.value = ''
+        amountSelector.selectedIndex = 0
+        providerSelector.selectedIndex = 0
+
     }
 
     function updateBalance(provider, amount) {
@@ -302,7 +310,7 @@
         if (confirm("Are you sure you want to delete all records?")) {
             localStorage.removeItem('pinsDatabase');
             database = [];
-            updateTable(); 
+            updateTable();
         }
     }
 
