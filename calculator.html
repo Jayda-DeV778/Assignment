@@ -51,7 +51,8 @@
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 ">CE</button>
             <button onclick="clearInput()" class="btn btn-secondary btn-lg w-25 text-danger">C</button>
-            <button onclick="clearEntry()" class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">backspace</span></button>
+            <button onclick="clearEntry()" class="btn btn-secondary btn-lg w-25"><span
+                    class="material-symbols-outlined mt-1">backspace</span></button>
             <button onclick="appendSymbol(`${'/'}`)" class="btn btn-secondary btn-lg w-25">/</button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
@@ -64,7 +65,8 @@
             <button onclick="appendnumber(7)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">7</button>
             <button onclick="appendnumber(8)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">8</button>
             <button onclick="appendnumber(9)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">9</button>
-            <button onclick="appendSymbol(`${'*'}`)" class="btn btn-secondary btn-lg w-25"><span class="material-symbols-outlined mt-1">close</span></button>
+            <button onclick="appendSymbol(`${'*'}`)" class="btn btn-secondary btn-lg w-25"><span
+                    class="material-symbols-outlined mt-1">close</span></button>
         </div>
         <div class="d-flex gap-1 mt-1 mx-1">
             <button onclick="appendnumber(4)" class="btn btn-secondary btn-lg w-25 text-info fw-medium">4</button>
@@ -130,8 +132,8 @@
         try {
             userInput.value = formatNumber(eval(userInput.value.replace(/,/g, '')));
         } catch (error) {
-            userInput.value = 'Syntax Error';
             alert('Syntax Error');
+            userInput.value = ''
         }
     }
 
@@ -139,8 +141,8 @@
         try {
             userInput.value = formatNumber(Math.pow(eval(userInput.value.replace(/,/g, '')), 2));
         } catch (error) {
-            userInput.value = 'Syntax Error';
             alert('Mathematical Error');
+            userInput.value = ''
         }
     }
 
@@ -148,8 +150,8 @@
         try {
             userInput.value = formatNumber(1 / eval(userInput.value.replace(/,/g, '')));
         } catch (error) {
-            userInput.value = 'Mathematical Error';
             alert('Mathematical Error');
+            userInput.value = ''
         }
     }
 
@@ -157,8 +159,8 @@
         try {
             userInput.value = formatNumber(Math.sqrt(eval(userInput.value.replace(/,/g, ''))));
         } catch (error) {
-            userInput.value = 'Mathematical Error';
             alert('Mathematical Error');
+            userInput.value = ''
         }
     }
 
