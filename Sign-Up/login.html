@@ -77,14 +77,19 @@
 
     console.log(database);
 
-    const user = database.find(user => user.mail === loginEmail && user.password === loginPassword);
+    const users = database.find(user => user.mail === loginEmail && user.password === loginPassword);
 
     const loginButton = document.getElementById('loginButton');
+    
+    if (loginEmail === '' && loginPassword === '') {
+      alert('All fields are mandatory')
+    }
 
-    if (user) {
+    if (users) {
       loginButton.innerHTML = 'Checking....';
       setTimeout(() => {
         loginButton.innerHTML = 'Login';
+        localStorage.setItem('currentUsers', users.name)
         alert('Login successful!');
         window.location.href = 'dashboard.html';
       }, 3000);
