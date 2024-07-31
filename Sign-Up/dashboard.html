@@ -622,7 +622,12 @@
 <script>
 	window.onload = function () {
 		const userName =localStorage.getItem('currentUsers');
-		if (userName) {
+
+		if (!userName) {
+			alert('You are not authorized')
+			window.location.href = 'login.html'
+		}
+		else{
 			alert(`Hello ${userName}`)
 		}
 	}
