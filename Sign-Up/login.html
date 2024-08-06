@@ -59,6 +59,7 @@
       <div class="sec-2">
         <ion-icon name="lock-closed-outline"></ion-icon>
         <input class="pas" type="password" id="loginPassword" placeholder="············" />
+        <button onclick="show()">Show Password</button>
         <ion-icon class="show-hide" name="eye-outline"></ion-icon>
       </div>
     </div>
@@ -80,16 +81,20 @@
     const users = database.find(user => user.mail === loginEmail && user.password === loginPassword);
 
     const loginButton = document.getElementById('loginButton');
-    
+
     if (loginEmail === '' && loginPassword === '') {
       alert('All fields are mandatory')
     }
 
     if (users) {
       loginButton.innerHTML = 'Checking....';
+
+      let userIndex = database.findIndex((data) => data.mail === user.mail)
+      localStorage.setItem('loggedUserIndex', userIndex)
+      console.log(userIndex);
+
       setTimeout(() => {
         loginButton.innerHTML = 'Login';
-        localStorage.setItem('currentUsers', users.name)
         alert('Login successful!');
         window.location.href = 'dashboard.html';
       }, 3000);
@@ -97,4 +102,17 @@
       alert('Invalid email or password. Please try again.');
     }
   }
+
+  function show() {
+    let passInput = document.getElementById('loginPassword');
+    if (passInput.type === 'password') {
+      passInput.type = 'text';
+    } else if (passInput.type === 'text') {
+      passInput.type = 'password';
+    } else {
+      return;
+    }
+  }
+
+
 </script>
