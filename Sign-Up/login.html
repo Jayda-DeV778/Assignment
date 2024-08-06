@@ -89,7 +89,7 @@
     if (users) {
       loginButton.innerHTML = 'Checking....';
 
-      let userIndex = database.findIndex((data) => data.mail === user.mail)
+      let userIndex = database.findIndex((data) => data.mail === users.mail)
       localStorage.setItem('loggedUserIndex', userIndex)
       console.log(userIndex);
 
